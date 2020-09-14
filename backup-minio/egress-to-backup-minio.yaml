@@ -1,0 +1,18 @@
+---
+apiVersion: crd.projectcalico.org/v1
+kind: GlobalNetworkPolicy
+metadata:
+  name: egress-to-backup-minio
+spec:
+  namespaceSelector: k8up == 'backup-enabled'
+  selector: baasresource == 'true'
+  types:
+    - Egress
+  egress:
+    - action: Allow
+      protocol: TCP
+      destination:
+        namespaceSelector: projectcalico.org/name == 'backup-minio'
+        selector: release == 'backup-minio'
+        ports:
+          - 9000

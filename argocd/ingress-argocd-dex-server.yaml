@@ -1,0 +1,22 @@
+---
+apiVersion: crd.projectcalico.org/v1
+kind: NetworkPolicy
+metadata:
+  name: ingress-argocd-dex-server
+  namespace: argocd
+spec:
+  selector: >-
+    app.kubernetes.io/instance == 'argocd' &&
+    app.kubernetes.io/component == 'dex-server'
+  types:
+    - Ingress
+  ingress:
+    - action: Allow
+      protocol: TCP
+      source:
+        selector: >-
+          app.kubernetes.io/instance == 'argocd' &&
+          app.kubernetes.io/component == 'server'
+      destination:
+        ports:
+          - 5556

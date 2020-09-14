@@ -1,0 +1,18 @@
+---
+apiVersion: crd.projectcalico.org/v1
+kind: NetworkPolicy
+metadata:
+  name: ingress-keycloak-postgres
+  namespace: keycloak
+spec:
+  selector: kubedb.com/name == 'keycloak-postgres'
+  types:
+    - Ingress
+  ingress:
+    - action: Allow
+      protocol: TCP
+      source:
+        selector: app == 'keycloak'
+      destination:
+        ports:
+          - 5432

@@ -1,0 +1,18 @@
+---
+apiVersion: crd.projectcalico.org/v1
+kind: NetworkPolicy
+metadata:
+  name: ingress-nextcloud-mysql
+  namespace: nextcloud
+spec:
+  selector: kubedb.com/name == 'nextcloud-mysql'
+  types:
+    - Ingress
+  ingress:
+    - action: Allow
+      protocol: TCP
+      source:
+        selector: app == 'nextcloud'
+      destination:
+        ports:
+          - 3306

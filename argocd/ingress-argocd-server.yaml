@@ -1,0 +1,21 @@
+---
+apiVersion: crd.projectcalico.org/v1
+kind: NetworkPolicy
+metadata:
+  name: ingress-argocd-server
+  namespace: argocd
+spec:
+  selector: >-
+    app.kubernetes.io/instance == 'argocd' &&
+    app.kubernetes.io/component == 'server'
+  types:
+    - Ingress
+  ingress:
+    - action: Allow
+      protocol: TCP
+      source:
+        namespaceSelector: projectcalico.org/name == 'traefik'
+        selector: app.kubernetes.io/instance == 'traefik'
+      destination:
+        ports:
+          - 8080
